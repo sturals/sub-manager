@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscription Manager</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1><span class="gradient-text">Sub</span>Manager</h1>
+            <p>Умный менеджер прокси подписок</p>
+        </header>
+
+        <main>
+            <section class="card">
+                <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; cursor: pointer; user-select: none;" id="subs-header-toggle">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <h2>Ваши подписки</h2>
+                        <span id="subs-toggle-icon" style="color: var(--text-muted); font-size: 0.8rem;">▼</span>
+                    </div>
+                    <span id="subs-count" style="color: var(--text-muted); font-size: 0.9rem;">Всего: 0</span>
+                </div>
+                
+                <div id="subs-content-container">
+                    <div class="add-sub-box">
+                        <input type="text" id="new-sub-url" placeholder="https://... (URL подписки)">
+                        <button id="btn-add-sub" class="btn secondary">Добавить</button>
+                    </div>
+
+                    <div id="subs-list" class="subs-list">
+                        <!-- list items inserted by JS -->
+                    </div>
+                </div>
+
+                <div class="actions" style="margin-top: 1rem;">
+                    <button id="btn-run" class="btn primary">Запуск (Обновить и проверить)</button>
+                    <button id="btn-stop" class="btn danger" style="display: none;">Остановить</button>
+                </div>
+            </section>
+
+            <section class="card stats-card">
+                <h2>Статистика узлов</h2>
+                <div class="stats-grid">
+                    <div class="stat-box">
+                        <span class="stat-label">Всего</span>
+                        <span class="stat-value" id="stat-total">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Активные</span>
+                        <span class="stat-value success" id="stat-active">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Мертвые</span>
+                        <span class="stat-value danger" id="stat-dead">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Дубликатов</span>
+                        <span class="stat-value" id="stat-duplicates" style="color: var(--secondary);">0</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-label">Не проверено</span>
+                        <span class="stat-value warning" id="stat-unchecked">0</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card" id="progress-section" style="display: none;">
+                <h2>Прогресс работы</h2>
+                <p id="status-text">Ожидание...</p>
+                <div class="progress-bar-bg" style="margin-bottom: 1rem;">
+                    <div class="progress-bar-fill" id="progress-fill"></div>
+                </div>
+                <textarea id="live-logs" rows="8" readonly style="font-size: 0.85rem; color: #cbd5e1; background: #020617; border-color: #1e293b;" placeholder="Логи процесса..."></textarea>
+            </section>
+
+            <section class="card export-card">
+                <h2>Экспорт</h2>
+                <p>Используйте этот URL в вашем клиенте (v2rayN, NekoBox и др.)</p>
+                <div class="export-url-box">
+                    <input type="text" id="export-url" readonly>
+                    <button id="btn-copy" class="btn">Копировать</button>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>

@@ -1,0 +1,1035 @@
+{
+  "log": {
+    "loglevel": "warning"
+  },
+  "inbounds": [
+    {
+      "port": 10000,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-0",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10001,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-1",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10002,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-2",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10003,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-3",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10004,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-4",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10005,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-5",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10006,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-6",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10007,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-7",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10008,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-8",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10009,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-9",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10010,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-10",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10011,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-11",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10012,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-12",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10013,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-13",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10014,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-14",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10015,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-15",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10016,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-16",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10017,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-17",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10018,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-18",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10019,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-19",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10020,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-20",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10021,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-21",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10022,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-22",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    },
+    {
+      "port": 10023,
+      "listen": "127.0.0.1",
+      "protocol": "socks",
+      "tag": "in-23",
+      "settings": {
+        "auth": "noauth",
+        "udp": true
+      }
+    }
+  ],
+  "outbounds": [
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "95.179.166.190",
+            "port": 31707,
+            "users": [
+              {
+                "id": "bf19d5c2-d644-4524-8c75-76715109fe9e",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-0"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "95.38.189.126",
+            "port": 8080,
+            "users": [
+              {
+                "id": "3994b497-dd9f-46a9-b4a5-9a3961029c64",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-1"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "ipa.xn--220ba84am6g99wihgilau3ar1g.info",
+            "port": 2053,
+            "users": [
+              {
+                "id": "b04868f0-b54d-4f48-aad4-e5543d03c909",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "cdn.xn--220ba84am6g99wihgilau3ar1g.info",
+          "fingerprint": "chrome",
+          "show": false
+        },
+        "wsSettings": {
+          "path": "/",
+          "headers": {
+            "Host": "cdn.xn--220ba84am6g99wihgilau3ar1g.info"
+          }
+        }
+      },
+      "tag": "out-2"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "nya.nyav2.info",
+            "port": 20277,
+            "users": [
+              {
+                "id": "9ed5fbba-ec0f-4e14-8b59-489bfeaf790d",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-3"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "s1.connect.bloroxy.net",
+            "port": 1021,
+            "users": [
+              {
+                "id": "255b35e3-e5ef-4255-8d71-a53c0ac93563",
+                "alterId": 0,
+                "security": "aes-128-gcm"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-4"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "s1.connect.bloroxy.net",
+            "port": 1060,
+            "users": [
+              {
+                "id": "30bede76-b576-4ef6-a29e-e28aad51ee32",
+                "alterId": 0,
+                "security": "aes-128-gcm"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-5"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "s1.connect.labex.pro",
+            "port": 1101,
+            "users": [
+              {
+                "id": "5ac8bdaf-9fa3-4a84-83a8-530eea86b586",
+                "alterId": 0,
+                "security": "aes-128-gcm"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-6"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "s1.hamishe.cloud",
+            "port": 110,
+            "users": [
+              {
+                "id": "bc53f4f7-66c0-43ce-b950-649ec286a3d2",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-7"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "188.245.48.29",
+            "port": 53323,
+            "users": [
+              {
+                "id": "caf5249b-7f90-45bc-9cb8-c8b41b443290",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-8"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "45.63.100.170",
+            "port": 43220,
+            "users": [
+              {
+                "id": "52273755-abee-4239-8688-5bb7d0629d6f",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-9"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "188.114.97.21",
+            "port": 443,
+            "users": [
+              {
+                "id": "f584de15-2034-4170-a723-f48c2bae5e0f",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "",
+          "fingerprint": "",
+          "show": false
+        },
+        "wsSettings": {
+          "path": "/linkws",
+          "headers": {
+            "Host": "afrhms16v.bestxray.buzz"
+          }
+        }
+      },
+      "tag": "out-10"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "00000000000000000000000000000000000000000000000000000000000004a.rui77.com",
+            "port": 443,
+            "users": [
+              {
+                "id": "f0038a33-6b22-4449-8bef-c16829a9d3aa",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-11"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "103.159.132.100",
+            "port": 51919,
+            "users": [
+              {
+                "id": "35e0c4cb-2caa-4c09-cb85-cb26c2cb06b9",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-12"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "139.99.90.122",
+            "port": 443,
+            "users": [
+              {
+                "id": "c0156451-4efb-45e2-84fc-8d315c4650db",
+                "alterId": 32,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-13"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "172.64.198.249",
+            "port": 2086,
+            "users": [
+              {
+                "id": "e9e3cc13-db48-4cc1-8c24-7626439a5339",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "github.com/Alvin9999",
+          "headers": {
+            "Host": "ip1.1457230.xyz"
+          }
+        }
+      },
+      "tag": "out-14"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "4.hk.zz.xxxxx.x-t-fuckword.network",
+            "port": 36676,
+            "users": [
+              {
+                "id": "244effd9-0204-3c4a-8537-0dca4e5fd9b5",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-15"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "c12s4.jamjams3.net",
+            "port": 12623,
+            "users": [
+              {
+                "id": "8ff878d1-eaf8-4afd-8cbb-6d657596af64",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-16"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "cdn.bootloader.cf",
+            "port": 80,
+            "users": [
+              {
+                "id": "74758f06-f4b9-4ef1-a86c-f0a0cc82109f",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/aries",
+          "headers": {
+            "Host": "lux.justu.ml"
+          }
+        }
+      },
+      "tag": "out-17"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "v2.layspay.co",
+            "port": 58554,
+            "users": [
+              {
+                "id": "0c5adea8-ca19-43e4-9e66-1def2ba0e663",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "",
+          "fingerprint": "",
+          "show": false
+        }
+      },
+      "tag": "out-18"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.19.45.84",
+            "port": 2095,
+            "users": [
+              {
+                "id": "7a737f41-b792-4260-94ff-3d864da67b80",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/",
+          "headers": {
+            "Host": "onea.flha.ru"
+          }
+        }
+      },
+      "tag": "out-19"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "104.26.5.67",
+            "port": 2086,
+            "users": [
+              {
+                "id": "e9e3cc13-db48-4cc1-8c24-7626439a5339",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "github.com/Alvin9999",
+          "headers": {
+            "Host": "ip1.1789034.xyz"
+          }
+        }
+      },
+      "tag": "out-20"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "120.232.153.40",
+            "port": 35601,
+            "users": [
+              {
+                "id": "418048af-a293-4b99-9b0c-98ca3580dd24",
+                "alterId": 64,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "none"
+      },
+      "tag": "out-21"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "cfcdn1.sanfencdn9.com",
+            "port": 2052,
+            "users": [
+              {
+                "id": "423caa0c-0542-4326-92e1-18769b6608e7",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "ws",
+        "security": "none",
+        "wsSettings": {
+          "path": "/video/WNMicnDh",
+          "headers": {
+            "Host": "tw1eskJpKcA.inivtrak.xyz"
+          }
+        }
+      },
+      "tag": "out-22"
+    },
+    {
+      "protocol": "vmess",
+      "settings": {
+        "vnext": [
+          {
+            "address": "node-de.connectsuite.org",
+            "port": 2053,
+            "users": [
+              {
+                "id": "fd169a0a-5c32-4f3e-9b6c-28dd35f2a5e5",
+                "alterId": 0,
+                "security": "auto"
+              }
+            ]
+          }
+        ]
+      },
+      "streamSettings": {
+        "network": "tcp",
+        "security": "tls",
+        "tlsSettings": {
+          "serverName": "node-de.connectsuite.org",
+          "fingerprint": "",
+          "show": false
+        }
+      },
+      "tag": "out-23"
+    }
+  ],
+  "routing": {
+    "rules": [
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-0"
+        ],
+        "outboundTag": "out-0"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-1"
+        ],
+        "outboundTag": "out-1"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-2"
+        ],
+        "outboundTag": "out-2"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-3"
+        ],
+        "outboundTag": "out-3"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-4"
+        ],
+        "outboundTag": "out-4"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-5"
+        ],
+        "outboundTag": "out-5"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-6"
+        ],
+        "outboundTag": "out-6"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-7"
+        ],
+        "outboundTag": "out-7"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-8"
+        ],
+        "outboundTag": "out-8"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-9"
+        ],
+        "outboundTag": "out-9"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-10"
+        ],
+        "outboundTag": "out-10"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-11"
+        ],
+        "outboundTag": "out-11"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-12"
+        ],
+        "outboundTag": "out-12"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-13"
+        ],
+        "outboundTag": "out-13"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-14"
+        ],
+        "outboundTag": "out-14"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-15"
+        ],
+        "outboundTag": "out-15"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-16"
+        ],
+        "outboundTag": "out-16"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-17"
+        ],
+        "outboundTag": "out-17"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-18"
+        ],
+        "outboundTag": "out-18"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-19"
+        ],
+        "outboundTag": "out-19"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-20"
+        ],
+        "outboundTag": "out-20"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-21"
+        ],
+        "outboundTag": "out-21"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-22"
+        ],
+        "outboundTag": "out-22"
+      },
+      {
+        "type": "field",
+        "inboundTag": [
+          "in-23"
+        ],
+        "outboundTag": "out-23"
+      }
+    ]
+  }
+}
