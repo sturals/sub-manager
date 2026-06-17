@@ -228,9 +228,7 @@ function buildStreamSettings(params) {
             show: false
         };
         if (streamSettings.security === "tls") {
-            if (params.allowInsecure === '1' || params.allowInsecure === 'true' || params.insecure === '1') {
-                sec.allowInsecure = true;
-            }
+
             if (params.alpn) {
                 sec.alpn = String(params.alpn).split(',').map(s => s.trim()).filter(Boolean);
             }
