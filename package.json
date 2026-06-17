@@ -1,20 +1,19 @@
 {
   "name": "sub-manager",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "version": "1.1.0",
+  "description": "Self-hosted manager for VPN subscription links: aggregate, dedupe, batch-test via Xray, export alive nodes",
+  "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js",
+    "test": "node tests/parser.test.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "dependencies": {
     "axios": "^1.16.1",
-    "body-parser": "^2.2.2",
-    "cors": "^2.8.6",
     "express": "^5.2.1",
-    "geoip-lite": "^1.4.10",
-    "socks-proxy-agent": "^10.0.0"
+    "socks-proxy-agent": "^10.0.0",
+    "yaml": "^2.9.0"
   }
 }

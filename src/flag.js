@@ -1,5 +1,3 @@
-const geoip = require('geoip-lite'); // Keeping just in case, but we rely on Cloudflare now
-
 function getFlagEmoji(countryCode) {
     if (!countryCode) return '';
     return countryCode.toUpperCase().replace(/./g, char => String.fromCodePoint(char.charCodeAt(0) + 127397));

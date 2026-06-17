@@ -1,0 +1,19 @@
+# dependencies
+node_modules/
+
+# runtime data (personal!)
+database.json
+app.log*
+
+# xray binaries & geodata — download via tools/get-xray.ps1
+xray/xray.exe
+xray/xray
+xray/wintun.dll
+xray/*.dat
+# generated at every test run
+xray/config.json
+
+# OS junk
+Thumbs.db
+.DS_Store
+bun.lock*
