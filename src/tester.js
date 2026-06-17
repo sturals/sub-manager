@@ -137,13 +137,20 @@ async function testNodes(nodes) {
     const xrayProcess = spawn(xrayPath, ['run', '-c', configPath]);
     activeXrayProcess = xrayProcess;
 
+    let xrayErrorLog = '';
+    xrayProcess.stderr.on('data', (data) => {
+        xrayErrorLog += data.toString();
+    });
+
     const ready = await waitForXrayReady(chunkBasePort, xrayProcess);
     if (!ready) {
         if (activeXrayProcess) {
             try { activeXrayProcess.kill(); } catch(e) {}
             activeXrayProcess = null;
         }
-        if (!aborted) logWarn('Xray не поднялся за 10 секунд — чанк пропущен (узлы не помечаются мертвыми)');
+        if (!aborted) {
+            logWarn(`Xray не поднялся за 10 секунд — чанк пропущен. ExitCode: ${xrayProcess.exitCode}. Error: ${xrayErrorLog.substring(0, 200)}`);
+        }
         return { results: [], completed: false };
     }
 
