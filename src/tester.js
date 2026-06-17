@@ -10,7 +10,7 @@ const xrayBinary = process.platform === 'win32' ? 'xray.exe' : 'xray';
 const xrayPath = path.join(__dirname, '../xray', xrayBinary);
 const configPath = path.join(__dirname, '../xray/config.json');
 
-const BASE_PORT = 40000;
+let currentBasePort = 40000;
 const TEST_URL = 'https://www.cloudflare.com/cdn-cgi/trace';
 const TEST_TIMEOUT = 5000;
 
@@ -91,6 +91,10 @@ async function testNodes(nodes) {
 
     aborted = false;
 
+    const chunkBasePort = currentBasePort;
+    currentBasePort += 50;
+    if (currentBasePort > 50000) currentBasePort = 40000;
+
     // 1. Generate Xray Config
     const inbounds = [];
     const outbounds = [];
@@ -98,7 +102,7 @@ async function testNodes(nodes) {
 
     for (let i = 0; i < nodes.length; i++) {
         const node = nodes[i];
-        const port = BASE_PORT + i;
+        const port = chunkBasePort + i;
         const tag = `out-${i}`;
 
         inbounds.push({
@@ -133,7 +137,7 @@ async function testNodes(nodes) {
     const xrayProcess = spawn(xrayPath, ['run', '-c', configPath]);
     activeXrayProcess = xrayProcess;
 
-    const ready = await waitForXrayReady(BASE_PORT, xrayProcess);
+    const ready = await waitForXrayReady(chunkBasePort, xrayProcess);
     if (!ready) {
         if (activeXrayProcess) {
             try { activeXrayProcess.kill(); } catch(e) {}
@@ -144,7 +148,7 @@ async function testNodes(nodes) {
     }
 
     // 3. Test all nodes of the chunk in parallel
-    const results = await Promise.all(nodes.map((node, i) => testNode(node, BASE_PORT + i)));
+    const results = await Promise.all(nodes.map((node, i) => testNode(node, chunkBasePort + i)));
 
     const completed = !aborted;
 
