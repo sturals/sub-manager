@@ -10,7 +10,7 @@ const xrayBinary = process.platform === 'win32' ? 'xray.exe' : 'xray';
 const xrayPath = path.join(__dirname, '../xray', xrayBinary);
 const configPath = path.join(__dirname, '../xray/config.json');
 
-const BASE_PORT = 10000;
+const BASE_PORT = 40000;
 const TEST_URL = 'https://www.cloudflare.com/cdn-cgi/trace';
 const TEST_TIMEOUT = 5000;
 
