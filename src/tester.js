@@ -1,7 +1,7 @@
 const fs = require('fs');
 const net = require('net');
 const path = require('path');
-const { spawn } = require('child_process');
+const { spawn, spawnSync } = require('child_process');
 const axios = require('axios');
 const { SocksProxyAgent } = require('socks-proxy-agent');
 const { logWarn } = require('./logger');
@@ -39,6 +39,89 @@ async function waitForXrayReady(port, processRef, timeoutMs = 10000) {
         await new Promise(r => setTimeout(r, 200));
     }
     return false;
+}
+
+// ---------------------------------------------------------------------------
+// Config pre-validation: runs `xray run -test -c config.json` synchronously.
+// Returns true if Xray accepts the config, false otherwise.
+// ---------------------------------------------------------------------------
+function validateConfig(configObj) {
+    fs.writeFileSync(configPath, JSON.stringify(configObj, null, 2));
+    const res = spawnSync(xrayPath, ['run', '-test', '-c', configPath], { timeout: 15000 });
+    return res.status === 0;
+}
+
+// ---------------------------------------------------------------------------
+// Build Xray config object for a set of nodes starting at basePort.
+// ---------------------------------------------------------------------------
+function buildConfig(nodes, basePort) {
+    const inbounds = [];
+    const outbounds = [];
+    const routingRules = [];
+
+    for (let i = 0; i < nodes.length; i++) {
+        const node = nodes[i];
+        const port = basePort + i;
+        const tag = `out-${i}`;
+
+        inbounds.push({
+            port: port,
+            listen: "127.0.0.1",
+            protocol: "socks",
+            tag: `in-${i}`,
+            settings: { auth: "noauth", udp: true }
+        });
+
+        const outbound = JSON.parse(JSON.stringify(node.parsed.outbound));
+        outbound.tag = tag;
+        outbounds.push(outbound);
+
+        routingRules.push({
+            type: "field",
+            inboundTag: [`in-${i}`],
+            outboundTag: tag
+        });
+    }
+
+    return {
+        log: { loglevel: "warning" },
+        inbounds,
+        outbounds,
+        routing: { rules: routingRules }
+    };
+}
+
+// ---------------------------------------------------------------------------
+// Binary search for bad nodes in a list. Returns an array of node IDs that
+// cause Xray config validation to fail.
+// ---------------------------------------------------------------------------
+function findBadNodeIds(nodes, basePort) {
+    if (nodes.length === 0) return [];
+
+    // Single node — if it fails, it's bad
+    if (nodes.length === 1) {
+        const cfg = buildConfig(nodes, basePort);
+        if (!validateConfig(cfg)) {
+            return [nodes[0].id];
+        }
+        return [];
+    }
+
+    // First check if this whole set is valid
+    const cfg = buildConfig(nodes, basePort);
+    if (validateConfig(cfg)) {
+        return []; // All good
+    }
+
+    // Split in half, recurse
+    const mid = Math.ceil(nodes.length / 2);
+    const left = nodes.slice(0, mid);
+    const right = nodes.slice(mid);
+
+    const badLeft = findBadNodeIds(left, basePort);
+    const badRight = findBadNodeIds(right, basePort);
+
+    return [...badLeft, ...badRight];
 }
 
 async function testNode(node, port) {
@@ -95,67 +178,66 @@ async function testNodes(nodes) {
     currentBasePort += 50;
     if (currentBasePort > 50000) currentBasePort = 40000;
 
-    // 1. Generate Xray Config
-    const inbounds = [];
-    const outbounds = [];
-    const routingRules = [];
+    // 1. Build config & pre-validate
+    let validNodes = nodes;
+    let config = buildConfig(validNodes, chunkBasePort);
 
-    for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
-        const port = chunkBasePort + i;
-        const tag = `out-${i}`;
+    if (!validateConfig(config)) {
+        // Config is bad — find the problematic nodes via binary search
+        const badIds = findBadNodeIds(validNodes, chunkBasePort);
 
-        inbounds.push({
-            port: port,
-            listen: "127.0.0.1",
-            protocol: "socks",
-            tag: `in-${i}`,
-            settings: { auth: "noauth", udp: true }
-        });
+        if (badIds.length > 0) {
+            const badSet = new Set(badIds);
+            logWarn(`Найдено ${badIds.length} нод с невалидным конфигом — пропущены (IDs: ${badIds.slice(0, 5).join(', ')}${badIds.length > 5 ? '...' : ''})`);
+            validNodes = validNodes.filter(n => !badSet.has(n.id));
 
-        const outbound = JSON.parse(JSON.stringify(node.parsed.outbound));
-        outbound.tag = tag;
-        outbounds.push(outbound);
+            if (validNodes.length === 0) {
+                return { results: [], completed: true };
+            }
 
-        routingRules.push({
-            type: "field",
-            inboundTag: [`in-${i}`],
-            outboundTag: tag
-        });
+            // Rebuild config with clean nodes
+            config = buildConfig(validNodes, chunkBasePort);
+
+            // Final sanity check
+            if (!validateConfig(config)) {
+                logWarn('Конфиг всё ещё невалиден после удаления плохих нод — чанк пропущен');
+                return { results: [], completed: false };
+            }
+        } else {
+            logWarn('validateConfig вернул false, но бинарный поиск не нашёл виновника — чанк пропущен');
+            return { results: [], completed: false };
+        }
     }
 
-    const xrayConfig = {
-        log: { loglevel: "warning" },
-        inbounds: inbounds,
-        outbounds: outbounds,
-        routing: { rules: routingRules }
-    };
+    // 2. Write the validated config and start Xray
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
 
-    fs.writeFileSync(configPath, JSON.stringify(xrayConfig, null, 2));
-
-    // 2. Start Xray Process
     const xrayProcess = spawn(xrayPath, ['run', '-c', configPath]);
     activeXrayProcess = xrayProcess;
 
     let xrayErrorLog = '';
+    xrayProcess.stdout.on('data', (data) => {
+        xrayErrorLog += data.toString();
+    });
     xrayProcess.stderr.on('data', (data) => {
         xrayErrorLog += data.toString();
     });
 
     const ready = await waitForXrayReady(chunkBasePort, xrayProcess);
     if (!ready) {
+        await new Promise(r => setTimeout(r, 100));
         if (activeXrayProcess) {
             try { activeXrayProcess.kill(); } catch(e) {}
             activeXrayProcess = null;
         }
         if (!aborted) {
-            logWarn(`Xray не поднялся за 10 секунд — чанк пропущен. ExitCode: ${xrayProcess.exitCode}. Error: ${xrayErrorLog.substring(0, 200)}`);
+            logWarn(`Xray не поднялся за 10 секунд — чанк пропущен (узлы не помечаются мертвыми)`);
         }
         return { results: [], completed: false };
     }
 
-    // 3. Test all nodes of the chunk in parallel
-    const results = await Promise.all(nodes.map((node, i) => testNode(node, chunkBasePort + i)));
+    // 3. Test all valid nodes of the chunk in parallel
+    const results = await Promise.all(validNodes.map((node, i) => testNode(node, chunkBasePort + i)));
 
     const completed = !aborted;
 

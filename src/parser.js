@@ -44,6 +44,7 @@ function parseVless(link) {
         const params = Object.fromEntries(url.searchParams);
 
         if (!address || !port || !id) return null;
+        if (id.length > 40) return null; // Prevent Xray crash from giant invalid UUIDs
 
         return {
             protocol: 'vless',
@@ -57,7 +58,7 @@ function parseVless(link) {
                         port: port,
                         users: [{
                             id: id,
-                            encryption: params.encryption || "none",
+                            encryption: "none",
                             flow: params.flow || ""
                         }]
                     }]
@@ -88,6 +89,7 @@ function parseVmess(link) {
         const address = config.add;
         const port = parseInt(config.port);
         if (!address || !port || !config.id) return null;
+        if (String(config.id).length > 40) return null; // Prevent Xray crash from giant invalid UUIDs
 
         return {
             protocol: 'vmess',
@@ -158,6 +160,9 @@ function parseSs(link) {
         const password = userinfo.substring(colonIdx + 1);
         if (!method || !password) return null;
 
+        const supportedCiphers = ['aes-256-gcm', 'aes-128-gcm', 'chacha20-poly1305', 'xchacha20-poly1305', '2022-blake3-aes-128-gcm', '2022-blake3-aes-256-gcm', '2022-blake3-chacha20-poly1305'];
+        if (!supportedCiphers.includes(method.toLowerCase())) return null;
+
         return {
             protocol: 'shadowsocks',
             remark,
@@ -216,10 +221,26 @@ function parseTrojan(link) {
 }
 
 function buildStreamSettings(params) {
+    let net = params.type || "tcp";
+    if (net === "none") net = "tcp";
+
+    let sec = params.security || "none";
+    const validSecurity = ["none", "tls", "reality"];
+    if (!validSecurity.includes(sec)) sec = "none";
+
+    const validNetworks = ["tcp", "kcp", "ws", "h2", "quic", "grpc", "httpupgrade", "xhttp"];
+    if (!validNetworks.includes(net)) {
+        throw new Error("Invalid network transport");
+    }
+
     const streamSettings = {
-        network: params.type || "tcp",
-        security: params.security || "none"
+        network: net,
+        security: sec
     };
+
+    if (streamSettings.network === "http" || streamSettings.network === "h2") {
+        throw new Error("Unsupported network transport");
+    }
 
     if (streamSettings.security === "tls" || streamSettings.security === "reality") {
         const sec = {
@@ -234,7 +255,8 @@ function buildStreamSettings(params) {
             }
         }
         if (streamSettings.security === "reality") {
-            sec.publicKey = params.pbk || "";
+            if (!params.pbk) throw new Error("REALITY requires publicKey");
+            sec.publicKey = params.pbk;
             sec.shortId = params.sid || "";
             sec.spiderX = params.spx || "";
         }
