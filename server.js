@@ -197,6 +197,10 @@ app.post('/api/run', async (req, res) => {
                         log(`Дубликат по реальному IP: ${result.realIp}`);
                     } else {
                         seenRealIps.add(result.realIp);
+                        // Запоминаем дату первого успешного прохождения
+                        if (!node.activeFrom) {
+                            node.activeFrom = new Date().toISOString();
+                        }
                         node.status = 'active';
                         node.latency = result.latency;
                         node.country = result.country;
@@ -209,6 +213,7 @@ app.post('/api/run', async (req, res) => {
                 } else {
                     node.status = 'dead';
                     node.failCount = (node.failCount || 0) + 1;
+                    node.activeFrom = null; // сбрасываем при смерти — uptime считается от последнего «воскрешения»
                 }
 
                 currentStatus.progress++;
@@ -252,6 +257,29 @@ app.post('/api/run', async (req, res) => {
     }
 });
 
+// ---------------------------------------------------------------------------
+// GET /api/nodes — список активных узлов с uptime-метаданными для дашборда
+// ---------------------------------------------------------------------------
+app.get('/api/nodes', (req, res) => {
+    const db = loadDb();
+    const now = Date.now();
+    const nodes = [];
+    for (const [id, node] of Object.entries(db.nodes)) {
+        if (node.status !== 'active') continue;
+        const activeFromMs = node.activeFrom ? Date.parse(node.activeFrom) : null;
+        const uptimeDays = activeFromMs ? Math.floor((now - activeFromMs) / DAY_MS) : 0;
+        nodes.push({
+            id,
+            country: node.country || '??',
+            realIp: node.realIp || '',
+            latency: node.latency || 0,
+            activeFrom: node.activeFrom || null,
+            uptimeDays,
+        });
+    }
+    res.json(nodes);
+});
+
 app.get('/api/stats', (req, res) => {
     const db = loadDb();
     let total = 0;
@@ -271,11 +299,24 @@ app.get('/api/stats', (req, res) => {
 
 app.get('/sub', (req, res) => {
     const db = loadDb();
+    const now = Date.now();
+
+    // Optional filters: ?country=NL,DE&minDays=7
+    const countriesFilter = req.query.country
+        ? req.query.country.toUpperCase().split(',').map(c => c.trim()).filter(Boolean)
+        : null;
+    const minDays = req.query.minDays ? parseInt(req.query.minDays) || 0 : 0;
+
     const activeLinks = [];
-    for (const k in db.nodes) {
-        if (db.nodes[k].status === 'active') {
-            activeLinks.push(db.nodes[k].originalLink);
+    for (const node of Object.values(db.nodes)) {
+        if (node.status !== 'active') continue;
+        if (countriesFilter && !countriesFilter.includes((node.country || '').toUpperCase())) continue;
+        if (minDays > 0) {
+            const activeFromMs = node.activeFrom ? Date.parse(node.activeFrom) : 0;
+            const uptimeDays = Math.floor((now - activeFromMs) / DAY_MS);
+            if (uptimeDays < minDays) continue;
         }
+        activeLinks.push(node.originalLink);
     }
     const b64 = Buffer.from(activeLinks.join('\n')).toString('base64');
     res.type('text/plain').send(b64);

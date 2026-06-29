@@ -19,12 +19,12 @@
                 <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 1rem; cursor: pointer; user-select: none;" id="subs-header-toggle">
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                         <h2>Ваши подписки</h2>
-                        <span id="subs-toggle-icon" style="color: var(--text-muted); font-size: 0.8rem;">▼</span>
+                        <span id="subs-toggle-icon" style="color: var(--text-muted); font-size: 0.8rem;">►</span>
                     </div>
                     <span id="subs-count" style="color: var(--text-muted); font-size: 0.9rem;">Всего: 0</span>
                 </div>
                 
-                <div id="subs-content-container">
+                <div id="subs-content-container" style="display: none;">
                     <div class="add-sub-box">
                         <input type="text" id="new-sub-url" placeholder="https://... (URL подписки)">
                         <button id="btn-add-sub" class="btn secondary">Добавить</button>
@@ -76,8 +76,74 @@
                 <textarea id="live-logs" rows="8" readonly style="font-size: 0.85rem; color: #cbd5e1; background: #020617; border-color: #1e293b;" placeholder="Логи процесса..."></textarea>
             </section>
 
+            <!-- Nodes table + filter section -->
+            <section class="card nodes-card" id="nodes-section">
+                <div class="nodes-header">
+                    <h2>Активные узлы</h2>
+                    <span id="nodes-count" class="nodes-badge">0</span>
+                </div>
+
+                <div class="filter-controls">
+                    <div class="filter-group">
+                        <label class="filter-label">🌍 Страна</label>
+                        <select id="filter-country" multiple class="filter-select" size="1">
+                            <option value="">Все страны</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">⏱ Минимальный uptime</label>
+                        <select id="filter-days" class="filter-select">
+                            <option value="0">Любой</option>
+                            <option value="1">1+ день</option>
+                            <option value="3">3+ дня</option>
+                            <option value="7">7+ дней (неделя)</option>
+                            <option value="30">30+ дней (месяц)</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">↕ Сортировка</label>
+                        <select id="filter-sort" class="filter-select">
+                            <option value="uptime-desc">Uptime ↓</option>
+                            <option value="uptime-asc">Uptime ↑</option>
+                            <option value="country-asc">Страна А→Я</option>
+                            <option value="latency-asc">Задержка ↑</option>
+                        </select>
+                    </div>
+                    <button id="btn-apply-filter" class="btn primary btn-filter">Применить</button>
+                </div>
+
+                <div class="table-wrapper">
+                    <table class="nodes-table" id="nodes-table">
+                        <thead>
+                            <tr>
+                                <th>Страна</th>
+                                <th>IP адрес</th>
+                                <th>Задержка</th>
+                                <th>Работает с</th>
+                                <th>Uptime</th>
+                            </tr>
+                        </thead>
+                        <tbody id="nodes-tbody">
+                            <tr><td colspan="5" class="table-empty">Нажмите «Запуск» для загрузки данных</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="filtered-sub-box" id="filtered-sub-box">
+                    <div class="filtered-sub-header">
+                        <span>🔗 Готовая ссылка-подписка по фильтру</span>
+                        <button id="btn-gen-url" class="btn secondary">Сгенерировать ссылку</button>
+                    </div>
+                    <div class="export-url-box" style="margin-top: 0.75rem;">
+                        <input type="text" id="filtered-export-url" readonly placeholder="Нажмите «Сгенерировать ссылку»...">
+                        <button id="btn-copy-filtered" class="btn">Копировать</button>
+                    </div>
+                    <p id="filtered-count-info" style="margin-top: 0.5rem; font-size: 0.85rem;"></p>
+                </div>
+            </section>
+
             <section class="card export-card">
-                <h2>Экспорт</h2>
+                <h2>Экспорт (все активные)</h2>
                 <p>Используйте этот URL в вашем клиенте (v2rayN, NekoBox и др.)</p>
                 <div class="export-url-box">
                     <input type="text" id="export-url" readonly>

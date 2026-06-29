@@ -19,9 +19,27 @@ document.addEventListener('DOMContentLoaded', async () => {
     const progressFill = document.getElementById('progress-fill');
     const liveLogs = document.getElementById('live-logs');
 
+    // Nodes section elements
+    const nodesTbody = document.getElementById('nodes-tbody');
+    const nodesCount = document.getElementById('nodes-count');
+    const filterCountry = document.getElementById('filter-country');
+    const filterDays = document.getElementById('filter-days');
+    const filterSort = document.getElementById('filter-sort');
+    const btnApplyFilter = document.getElementById('btn-apply-filter');
+    const btnGenUrl = document.getElementById('btn-gen-url');
+    const filteredExportUrl = document.getElementById('filtered-export-url');
+    const btnCopyFiltered = document.getElementById('btn-copy-filtered');
+    const filteredCountInfo = document.getElementById('filtered-count-info');
+
+    // Raw nodes data from /api/nodes
+    let allNodes = [];
+    let filteredNodes = [];
+
     // When the dashboard is opened from another device (?token=...), forward
     // the token to every API call
     const ACCESS_TOKEN = new URLSearchParams(location.search).get('token');
+    let serverIpData = null;
+
     function api(url, opts) {
         if (ACCESS_TOKEN) {
             url += (url.includes('?') ? '&' : '?') + 'token=' + encodeURIComponent(ACCESS_TOKEN);
@@ -60,8 +78,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     // Load initial data
     try {
         const ipRes = await api('/api/ip');
-        const ipData = await ipRes.json();
-        exportUrl.value = `http://${ipData.ip}:${ipData.port}/sub?token=${ipData.token}`;
+        serverIpData = await ipRes.json();
+        exportUrl.value = `http://${serverIpData.ip}:${serverIpData.port}/sub?token=${serverIpData.token}`;
     } catch(e) {
         exportUrl.value = window.location.origin + '/sub';
     }
@@ -145,8 +163,163 @@ document.addEventListener('DOMContentLoaded', async () => {
         statDuplicates.textContent = stats.duplicates || 0;
     }
 
+    // -------------------------------------------------------------------------
+    // Nodes table logic
+    // -------------------------------------------------------------------------
+
+    function uptimeBadge(days) {
+        if (days >= 30) return { cls: 'badge-gold', label: `${days} дн` };
+        if (days >= 7)  return { cls: 'badge-green', label: `${days} дн` };
+        if (days >= 1)  return { cls: 'badge-yellow', label: `${days} дн` };
+        return { cls: 'badge-gray', label: '< 1 дня' };
+    }
+
+    function formatDate(isoStr) {
+        if (!isoStr) return '—';
+        const d = new Date(isoStr);
+        return d.toLocaleDateString('ru-RU', { day: '2-digit', month: '2-digit', year: '2-digit' });
+    }
+
+    function populateCountryFilter(nodes) {
+        const countries = [...new Set(nodes.map(n => n.country))].sort();
+        // Remember selection
+        const selected = new Set([...filterCountry.options]
+            .filter(o => o.selected && o.value)
+            .map(o => o.value));
+        filterCountry.innerHTML = '<option value="">🌐 Все страны</option>';
+        for (const c of countries) {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c;
+            if (selected.has(c)) opt.selected = true;
+            filterCountry.appendChild(opt);
+        }
+    }
+
+    function applyFilters() {
+        const selectedCountries = [...filterCountry.options]
+            .filter(o => o.selected && o.value)
+            .map(o => o.value);
+        const minDays = parseInt(filterDays.value) || 0;
+        const sort = filterSort.value;
+
+        filteredNodes = allNodes.filter(n => {
+            if (selectedCountries.length > 0 && !selectedCountries.includes(n.country)) return false;
+            if (minDays > 0 && n.uptimeDays < minDays) return false;
+            return true;
+        });
+
+        filteredNodes.sort((a, b) => {
+            if (sort === 'uptime-desc') return b.uptimeDays - a.uptimeDays;
+            if (sort === 'uptime-asc')  return a.uptimeDays - b.uptimeDays;
+            if (sort === 'country-asc') return a.country.localeCompare(b.country);
+            if (sort === 'latency-asc') return a.latency - b.latency;
+            return 0;
+        });
+
+        renderNodesTable(filteredNodes);
+        nodesCount.textContent = `${filteredNodes.length} / ${allNodes.length}`;
+    }
+
+    function renderNodesTable(nodes) {
+        if (nodes.length === 0) {
+            nodesTbody.innerHTML = '<tr><td colspan="5" class="table-empty">Нет узлов, соответствующих фильтру</td></tr>';
+            return;
+        }
+        nodesTbody.innerHTML = '';
+        for (const n of nodes) {
+            const badge = uptimeBadge(n.uptimeDays);
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td><span class="country-cell">${n.country}</span></td>
+                <td class="ip-cell">${n.realIp || '—'}</td>
+                <td class="latency-cell">${n.latency > 0 ? n.latency + ' мс' : '—'}</td>
+                <td class="date-cell">${formatDate(n.activeFrom)}</td>
+                <td><span class="uptime-badge ${badge.cls}">${badge.label}</span></td>
+            `;
+            nodesTbody.appendChild(tr);
+        }
+    }
+
+    async function loadNodes() {
+        try {
+            const res = await api('/api/nodes');
+            allNodes = await res.json();
+            populateCountryFilter(allNodes);
+            applyFilters();
+        } catch(e) {
+            console.error('Не удалось загрузить узлы:', e);
+        }
+    }
+
+    btnApplyFilter.addEventListener('click', applyFilters);
+
+    // -------------------------------------------------------------------------
+    // Filtered subscription URL builder
+    // -------------------------------------------------------------------------
+
+    function buildFilteredSubUrl() {
+        const selectedCountries = [...filterCountry.options]
+            .filter(o => o.selected && o.value)
+            .map(o => o.value);
+        const minDays = parseInt(filterDays.value) || 0;
+
+        let base;
+        if (serverIpData) {
+            base = `http://${serverIpData.ip}:${serverIpData.port}/sub?token=${serverIpData.token}`;
+        } else {
+            base = window.location.origin + '/sub?';
+        }
+
+        const params = new URLSearchParams();
+        // token already in base for serverIpData case; add for origin case
+        if (!serverIpData && ACCESS_TOKEN) params.set('token', ACCESS_TOKEN);
+        if (selectedCountries.length > 0) params.set('country', selectedCountries.join(','));
+        if (minDays > 0) params.set('minDays', minDays);
+
+        const queryStr = params.toString();
+        return base + (queryStr ? (base.includes('?') ? '&' : '?') + queryStr : '');
+    }
+
+    btnGenUrl.addEventListener('click', () => {
+        const url = buildFilteredSubUrl();
+        filteredExportUrl.value = url;
+
+        // Count matching nodes from current filter
+        const count = filteredNodes.length;
+        const selectedCountries = [...filterCountry.options]
+            .filter(o => o.selected && o.value)
+            .map(o => o.value);
+        const minDays = parseInt(filterDays.value) || 0;
+
+        let desc = `В подписку войдут ${count} узлов`;
+        if (selectedCountries.length > 0) desc += ` из ${selectedCountries.join(', ')}`;
+        if (minDays > 0) desc += ` с uptime ${minDays}+ дн.`;
+        filteredCountInfo.textContent = desc;
+        toast('Ссылка сгенерирована!', 'success');
+    });
+
+    btnCopyFiltered.addEventListener('click', async () => {
+        if (!filteredExportUrl.value) {
+            toast('Сначала нажмите «Сгенерировать ссылку»', 'error');
+            return;
+        }
+        try {
+            await navigator.clipboard.writeText(filteredExportUrl.value);
+        } catch(e) {
+            filteredExportUrl.select();
+            document.execCommand('copy');
+        }
+        btnCopyFiltered.textContent = 'Скопировано!';
+        setTimeout(() => btnCopyFiltered.textContent = 'Копировать', 2000);
+    });
+
+    // -------------------------------------------------------------------------
+    // Initial load
+    // -------------------------------------------------------------------------
     await loadSubs();
     await loadStats();
+    await loadNodes();
 
     const btnStop = document.getElementById('btn-stop');
 
@@ -200,7 +373,9 @@ document.addEventListener('DOMContentLoaded', async () => {
                 btnStop.style.display = 'none';
                 btnStop.disabled = false;
                 btnStop.textContent = 'Остановить';
+                // Reload stats and nodes table after run completes
                 loadStats();
+                loadNodes();
 
                 if (status.stage === 'idle' && status.total > 0) {
                     statusText.textContent = `Проверка узлов (${status.total}/${status.total})...`;
